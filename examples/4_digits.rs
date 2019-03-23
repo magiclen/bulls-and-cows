@@ -2,20 +2,22 @@ extern crate bulls_and_cows;
 
 use std::io::{self, Write};
 
-const DIGIT_LENGTH: usize = 4; // the reasonable range is 1~10
+use bulls_and_cows::Host;
+
+const LETTER_LENGTH: usize = 4; // the reasonable range is 1~10
 
 fn main() {
-    let mut host = bulls_and_cows::Host::build_with_random_answer(bulls_and_cows::Letters::generate_numeric_letters(), DIGIT_LENGTH).expect("Failed to initialize a new game");
+    let mut host = Host::build_with_random_answer(bulls_and_cows::Letters::generate_numeric_letters(), LETTER_LENGTH).expect("Failed to initialize a new game");
 
     let mut guess = String::new();
 
     loop {
-        println!("A new 1A2B question is done. You can make a guess now.");
+        println!("A new question is done. The guesser can make a guess now.");
 
         loop {
             print!("> ");
 
-            io::stdout().flush().unwrap();
+            io::stdout().flush().expect("Failed to flush");
 
             guess.clear();
 
@@ -23,15 +25,15 @@ fn main() {
 
             let guess = guess.trim();
 
-            if guess.len() != DIGIT_LENGTH {
+            if guess.len() != LETTER_LENGTH {
                 println!("Wrong format!");
 
                 continue;
             }
 
-            let mut answer = Vec::with_capacity(DIGIT_LENGTH);
+            let mut answer = Vec::with_capacity(LETTER_LENGTH);
 
-            for i in 0..DIGIT_LENGTH {
+            for i in 0..LETTER_LENGTH {
                 match guess.get(i..(i + 1)) {
                     Some(o) => {
                         match o.parse() {
@@ -55,7 +57,7 @@ fn main() {
                 Ok((a, b)) => {
                     println!("{}A{}B", a, b);
 
-                    if a == DIGIT_LENGTH {
+                    if a == LETTER_LENGTH {
                         println!("Congratulations!");
                         println!();
                         break;
@@ -69,6 +71,6 @@ fn main() {
             }
         }
 
-        host.renew_with_random_answer(DIGIT_LENGTH).expect("Failed to renew");
+        host.renew_with_random_answer(LETTER_LENGTH).expect("Failed to renew");
     }
 }

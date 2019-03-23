@@ -1,5 +1,6 @@
 use std::collections::HashSet;
 
+/// To generate letters.
 pub struct Letters;
 
 impl Letters {

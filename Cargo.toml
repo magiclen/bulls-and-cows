@@ -1,6 +1,6 @@
 [package]
 name = "bulls-and-cows"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["Magic Len <len@magiclen.org>"]
 repository = "https://github.com/magiclen/bulls-and-cows"
 homepage = "https://magiclen.org/bulls-and-cows"
@@ -10,5 +10,16 @@ description= "A framework for building bulls-and-cows games (1A2B) for any data 
 readme = "README.md"
 license = "MIT"
 
+[badges]
+travis-ci = { repository = "magiclen/bulls-and-cows", branch = "master" }
+appveyor = { repository = "magiclen/bulls-and-cows", branch = "master", service = "github" }
+
 [dependencies]
 rand = "0.6.5"
+random-pick = "1.2.3"
+regex = "1.1.2"
+permutohedron = "0.2.4"
+
+
+[dev-dependencies]
+lazy_static = "1.3.0"

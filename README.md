@@ -1,5 +1,7 @@
-/*!
-# Bulls and Cows
+Bulls and Cows
+====================
+
+[![Build Status](https://travis-ci.org/magiclen/bulls-and-cows.svg?branch=master)](https://travis-ci.org/magiclen/bulls-and-cows)
 
 This crate provides a framework for building bulls-and-cows games (1A2B) for any data type and any stages.
 
@@ -23,17 +25,15 @@ assert_eq!((0, 0), host.answer(&vec![5, 6, 7, 8]).unwrap());
 ```
 
 If you want to build up a more complete game stage, use the `play` module. You can see the example `custom_2_players` to learn how to do that.
-*/
 
-extern crate rand;
-extern crate random_pick;
-extern crate regex;
-extern crate permutohedron;
+## Crates.io
 
-mod host;
-mod letters;
-pub mod play;
-pub mod parser;
+https://crates.io/crates/bulls-and-cows
 
-pub use self::host::{Host, HostError};
-pub use self::letters::Letters;
+## Documentation
+
+https://docs.rs/bulls-and-cows
+
+## License
+
+[MIT](LICENSE)

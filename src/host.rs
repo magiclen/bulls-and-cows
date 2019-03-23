@@ -1,9 +1,11 @@
 use std::collections::HashSet;
 use std::hash::Hash;
+use std::fmt::{self, Formatter, Debug};
 
 use ::rand::seq::SliceRandom;
 
-#[derive(Debug, PartialEq, Eq)]
+#[derive(PartialEq, Eq)]
+/// The possible errors for the `Host` struct.
 pub enum HostError<T: Eq + Hash + Clone> {
     /// The length of letters for a Bulls and Cows game must be at least 1.
     LettersEmpty,
@@ -13,6 +15,19 @@ pub enum HostError<T: Eq + Hash + Clone> {
     AnswerContainsIncorrectLetter(T),
     /// There is an duplicated letter in the answer.
     AnswerContainsDuplicatedLetter(T),
+}
+
+impl<T: Eq + Hash + Clone> Debug for HostError<T> {
+    fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
+        match self {
+            HostError::LettersEmpty => f.write_str("HostError::LettersEmpty")?,
+            HostError::AnswerLengthIncorrect => f.write_str("HostError::AnswerLengthIncorrect")?,
+            HostError::AnswerContainsIncorrectLetter(_) => f.write_str("HostError::AnswerContainsIncorrectLetter")?,
+            HostError::AnswerContainsDuplicatedLetter(_) => f.write_str("HostError::AnswerContainsDuplicatedLetter")?,
+        }
+
+        Ok(())
+    }
 }
 
 #[derive(Debug)]
@@ -37,6 +52,26 @@ impl<T: Eq + Hash + Clone> Host<T> {
 }
 
 impl<T: Eq + Hash + Clone> Host<T> {
+    /// Build a bulls-and-cows game host with a fixed answer.
+    pub fn build(letters: HashSet<T>, answer_length: usize) -> Result<Host<T>, HostError<T>> {
+        if letters.is_empty() {
+            Err(HostError::LettersEmpty)
+        } else {
+            let letters_len = letters.len();
+
+            if answer_length == 0 || answer_length > letters_len {
+                Err(HostError::AnswerLengthIncorrect)
+            } else {
+                let answer: Vec<T> = letters.iter().take(answer_length).map(|e| e.clone()).collect();
+
+                Ok(Host {
+                    letters,
+                    answer,
+                })
+            }
+        }
+    }
+
     /// Build a bulls-and-cows game host with a random answer.
     pub fn build_with_random_answer(letters: HashSet<T>, answer_length: usize) -> Result<Host<T>, HostError<T>> {
         if letters.is_empty() {
