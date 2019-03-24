@@ -273,7 +273,7 @@ fn main() {
 
         qp.make_new_question();
 
-        println!("A new question is done. You can guess now.");
+        println!("A new question is done. The guesser can guess now.");
 
         loop {
             let (guess, ab) = 'guess: loop {
