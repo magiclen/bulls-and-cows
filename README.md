@@ -6,7 +6,7 @@ Bulls and Cows
 
 This crate provides a framework for building bulls-and-cows games (1A2B) for any data type and any stages.
 
-Typically, Bulls and Cows is game that has 2 players, a questioner and a guesser. The questioner needs to decide a secret 4-digit (0 to 9) number in his or her mind and asks the guesser to guess the number. If the secret number is 4271 and the guess is 1234, then the questioner needs to answer `1A2B`. `1A2B` will be a new clue for the guesser to make the next guess better.
+Typically, Bulls and Cows is a game that has 2 players, a questioner and a guesser. The questioner needs to decide a secret 4-digit (0 to 9) number in his or her mind and asks the guesser to guess the number. If the secret number is 4271 and the guess is 1234, then the questioner needs to answer `1A2B`. `1A2B` will be a new clue for the guesser to make the next guess better.
 
 Beside 4 digits, players can choose to play on any other length of digits. The 4-digit numbers can be changed to 4-letter words and the number of players can also be more than 2.
 
