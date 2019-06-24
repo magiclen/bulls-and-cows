@@ -20,10 +20,10 @@ pub enum HostError<T: Eq + Hash + Clone> {
 impl<T: Eq + Hash + Clone> Debug for HostError<T> {
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
         match self {
-            HostError::LettersEmpty => f.write_str("HostError::LettersEmpty")?,
-            HostError::AnswerLengthIncorrect => f.write_str("HostError::AnswerLengthIncorrect")?,
-            HostError::AnswerContainsIncorrectLetter(_) => f.write_str("HostError::AnswerContainsIncorrectLetter")?,
-            HostError::AnswerContainsDuplicatedLetter(_) => f.write_str("HostError::AnswerContainsDuplicatedLetter")?,
+            HostError::LettersEmpty => f.pad("HostError::LettersEmpty")?,
+            HostError::AnswerLengthIncorrect => f.pad("HostError::AnswerLengthIncorrect")?,
+            HostError::AnswerContainsIncorrectLetter(_) => f.pad("HostError::AnswerContainsIncorrectLetter")?,
+            HostError::AnswerContainsDuplicatedLetter(_) => f.pad("HostError::AnswerContainsDuplicatedLetter")?,
         }
 
         Ok(())

@@ -13,6 +13,7 @@ use ::random_pick;
 use play::players::player::Guesser;
 
 /// A questioner controlled by a computer.
+#[derive(Debug)]
 pub struct ComputerQuestioner<T: Eq + Hash + Clone> {
     host: Host<T>,
     thinking_delay: u64,
@@ -46,6 +47,7 @@ impl<T: Eq + Hash + Clone> Questioner<T> for ComputerQuestioner<T> {
 }
 
 /// A guesser controlled by a computer.
+#[derive(Debug)]
 pub struct ComputerGuesser<T: Eq + Hash + Clone> {
     letters: HashSet<T>,
     letter_length: usize,

@@ -1,6 +1,7 @@
 use ::regex::Regex;
 
 /// A parser to parse `XAYB` strings.
+#[derive(Debug)]
 pub struct ABParser {
     regex: Regex
 }
