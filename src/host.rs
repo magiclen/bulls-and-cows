@@ -30,11 +30,25 @@ impl<T: Eq + Hash + Clone> Debug for HostError<T> {
     }
 }
 
-#[derive(Debug)]
 /// The game host for generating the question and answering for the question.
 pub struct Host<T: Eq + Hash + Clone> {
     letters: HashSet<T>,
     answer: Vec<T>,
+}
+
+impl<T: Debug + Eq + Hash + Clone> Debug for Host<T> {
+    #[inline]
+    fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
+        if f.alternate() {
+            let debug_text = format!("Host {{\n    letters: {:#?},\n    answer: {:#?}\n}}", self.letters, self.answer);
+
+            f.pad(&debug_text)
+        } else {
+            let debug_text = format!("Host {{ letters: {:?}, answer: {:?} }}", self.letters, self.answer);
+
+            f.pad(&debug_text)
+        }
+    }
 }
 
 impl<T: Eq + Hash + Clone> Host<T> {
