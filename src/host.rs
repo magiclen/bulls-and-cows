@@ -19,7 +19,7 @@ pub enum HostError<T: Eq + Hash + Clone> {
 
 impl<T: Eq + Hash + Clone> Debug for HostError<T> {
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
-        impl_debug_for_enum!(HostError::{LettersEmpty, AnswerLengthIncorrect, (AnswerContainsIncorrectLetter(_): ((._, "AnswerContainsIncorrectLetter"))), (AnswerContainsDuplicatedLetter(_): ((._, "AnswerContainsDuplicatedLetter")))}, f, self);
+        impl_debug_for_enum!(HostError::{LettersEmpty, AnswerLengthIncorrect, (AnswerContainsIncorrectLetter(_): (let .0 = "AnswerContainsIncorrectLetter")), (AnswerContainsDuplicatedLetter(_): (let .0 = "AnswerContainsDuplicatedLetter"))}, f, self);
     }
 }
 
