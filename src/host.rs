@@ -19,14 +19,7 @@ pub enum HostError<T: Eq + Hash + Clone> {
 
 impl<T: Eq + Hash + Clone> Debug for HostError<T> {
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
-        match self {
-            HostError::LettersEmpty => f.pad("HostError::LettersEmpty")?,
-            HostError::AnswerLengthIncorrect => f.pad("HostError::AnswerLengthIncorrect")?,
-            HostError::AnswerContainsIncorrectLetter(_) => f.pad("HostError::AnswerContainsIncorrectLetter")?,
-            HostError::AnswerContainsDuplicatedLetter(_) => f.pad("HostError::AnswerContainsDuplicatedLetter")?,
-        }
-
-        Ok(())
+        impl_debug_for_enum!(HostError::{LettersEmpty, AnswerLengthIncorrect, (AnswerContainsIncorrectLetter(_): ((._, "AnswerContainsIncorrectLetter"))), (AnswerContainsDuplicatedLetter(_): ((._, "AnswerContainsDuplicatedLetter")))}, f, self);
     }
 }
 
@@ -39,15 +32,7 @@ pub struct Host<T: Eq + Hash + Clone> {
 impl<T: Debug + Eq + Hash + Clone> Debug for Host<T> {
     #[inline]
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
-        if f.alternate() {
-            let debug_text = format!("Host {{\n    letters: {:#?},\n    answer: {:#?}\n}}", self.letters, self.answer);
-
-            f.pad(&debug_text)
-        } else {
-            let debug_text = format!("Host {{ letters: {:?}, answer: {:?} }}", self.letters, self.answer);
-
-            f.pad(&debug_text)
-        }
+        impl_debug_for_struct!(Host, f, self, .letters, .answer);
     }
 }
 

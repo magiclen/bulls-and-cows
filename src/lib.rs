@@ -29,6 +29,8 @@ extern crate rand;
 extern crate random_pick;
 extern crate regex;
 extern crate permutohedron;
+#[macro_use]
+extern crate debug_helper;
 
 mod host;
 mod letters;
