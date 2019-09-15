@@ -7,7 +7,11 @@ use bulls_and_cows::Host;
 const LETTER_LENGTH: usize = 4; // the reasonable range is 1~10
 
 fn main() {
-    let mut host = Host::build_with_random_answer(bulls_and_cows::Letters::generate_numeric_letters(), LETTER_LENGTH).expect("Failed to initialize a new game");
+    let mut host = Host::build_with_random_answer(
+        bulls_and_cows::Letters::generate_numeric_letters(),
+        LETTER_LENGTH,
+    )
+    .expect("Failed to initialize a new game");
 
     let mut guess = String::new();
 

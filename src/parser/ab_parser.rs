@@ -1,9 +1,9 @@
-use ::regex::Regex;
+use regex::Regex;
 
 /// A parser to parse `XAYB` strings.
 #[derive(Debug)]
 pub struct ABParser {
-    regex: Regex
+    regex: Regex,
 }
 
 impl ABParser {
@@ -12,7 +12,7 @@ impl ABParser {
         let regex = Regex::new(r"^(\d+)[ ]*[aA][ ]*(\d+)[ ]*[bB]$").unwrap();
 
         ABParser {
-            regex
+            regex,
         }
     }
 }
@@ -26,17 +26,24 @@ impl ABParser {
             Some(captures) => {
                 let a = match captures[1].parse::<usize>() {
                     Ok(a) => a,
-                    Err(_) => return None
+                    Err(_) => return None,
                 };
 
                 let b = match captures[2].parse::<usize>() {
                     Ok(b) => b,
-                    Err(_) => return None
+                    Err(_) => return None,
                 };
 
                 Some((a, b))
             }
-            None => None
+            None => None,
         }
+    }
+}
+
+impl Default for ABParser {
+    #[inline]
+    fn default() -> Self {
+        ABParser::new()
     }
 }

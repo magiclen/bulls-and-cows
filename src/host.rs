@@ -1,8 +1,8 @@
 use std::collections::HashSet;
+use std::fmt::{self, Debug, Formatter};
 use std::hash::Hash;
-use std::fmt::{self, Formatter, Debug};
 
-use ::rand::seq::SliceRandom;
+use crate::rand::seq::SliceRandom;
 
 #[derive(PartialEq, Eq)]
 /// The possible errors for the `Host` struct.
@@ -61,7 +61,7 @@ impl<T: Eq + Hash + Clone> Host<T> {
             if answer_length == 0 || answer_length > letters_len {
                 Err(HostError::AnswerLengthIncorrect)
             } else {
-                let answer: Vec<T> = letters.iter().take(answer_length).map(|e| e.clone()).collect();
+                let answer: Vec<T> = letters.iter().take(answer_length).cloned().collect();
 
                 Ok(Host {
                     letters,
@@ -72,7 +72,10 @@ impl<T: Eq + Hash + Clone> Host<T> {
     }
 
     /// Build a bulls-and-cows game host with a random answer.
-    pub fn build_with_random_answer(letters: HashSet<T>, answer_length: usize) -> Result<Host<T>, HostError<T>> {
+    pub fn build_with_random_answer(
+        letters: HashSet<T>,
+        answer_length: usize,
+    ) -> Result<Host<T>, HostError<T>> {
         if letters.is_empty() {
             Err(HostError::LettersEmpty)
         } else {
@@ -88,7 +91,10 @@ impl<T: Eq + Hash + Clone> Host<T> {
     }
 
     /// Build a bulls-and-cows game host with a known answer.
-    pub fn build_with_known_answer(letters: HashSet<T>, answer: Vec<T>) -> Result<Host<T>, HostError<T>> {
+    pub fn build_with_known_answer(
+        letters: HashSet<T>,
+        answer: Vec<T>,
+    ) -> Result<Host<T>, HostError<T>> {
         if letters.is_empty() {
             Err(HostError::LettersEmpty)
         } else {

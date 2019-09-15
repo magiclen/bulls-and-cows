@@ -5,16 +5,14 @@ extern crate bulls_and_cows;
 
 use std::io::{self, Write};
 
-use bulls_and_cows::play::players::{Guesser, Questioner, ComputerQuestioner, ComputerGuesser};
 use bulls_and_cows::parser::ABParser;
+use bulls_and_cows::play::players::{ComputerGuesser, ComputerQuestioner, Guesser, Questioner};
 use bulls_and_cows::{Host, HostError};
 
 const COM_THINKING_DELAY: u64 = 750;
 
 lazy_static! {
-    static ref AB_PARSER: ABParser = {
-        ABParser::new()
-    };
+    static ref AB_PARSER: ABParser = { ABParser::new() };
 }
 
 pub enum GameError {
@@ -25,13 +23,13 @@ pub enum GameError {
 }
 
 pub struct CLIUserQuestioner {
-    letter_length: usize
+    letter_length: usize,
 }
 
 impl CLIUserQuestioner {
     pub fn new(letter_length: usize) -> CLIUserQuestioner {
         CLIUserQuestioner {
-            letter_length
+            letter_length,
         }
     }
 }
@@ -62,7 +60,7 @@ impl Questioner<u8> for CLIUserQuestioner {
                     Ok((a, b))
                 }
             }
-            None => Err(GameError::ABError(reply))
+            None => Err(GameError::ABError(reply)),
         }
     }
 }
@@ -151,7 +149,9 @@ impl Questioner<u8> for QuestioningPlayer {
     fn answer(&self, answer: &[u8]) -> Result<(usize, usize), Self::Error> {
         match self {
             QuestioningPlayer::CLIUser(p) => p.answer(answer),
-            QuestioningPlayer::Computer(p) => p.answer(answer).map_err(|err| GameError::HostError(err)),
+            QuestioningPlayer::Computer(p) => {
+                p.answer(answer).map_err(|err| GameError::HostError(err))
+            }
         }
     }
 }
@@ -169,7 +169,7 @@ impl Guesser<u8> for GuessingPlayer {
         match self {
             GuessingPlayer::CLIUser(p) => p.get_guess_times(),
             GuessingPlayer::Computer(p) => p.get_guess_times(),
-            _ => unreachable!()
+            _ => unreachable!(),
         }
     }
 
@@ -177,7 +177,7 @@ impl Guesser<u8> for GuessingPlayer {
         match self {
             GuessingPlayer::CLIUser(p) => p.set_guess_times(guess_times),
             GuessingPlayer::Computer(p) => p.set_guess_times(guess_times),
-            _ => unreachable!()
+            _ => unreachable!(),
         }
     }
 
@@ -185,7 +185,7 @@ impl Guesser<u8> for GuessingPlayer {
         match self {
             GuessingPlayer::CLIUser(p) => p.add_condition(guess, reply),
             GuessingPlayer::Computer(p) => p.add_condition(guess, reply),
-            _ => unreachable!()
+            _ => unreachable!(),
         }
     }
 
@@ -193,7 +193,7 @@ impl Guesser<u8> for GuessingPlayer {
         match self {
             GuessingPlayer::CLIUser(p) => p.guess(),
             GuessingPlayer::Computer(p) => p.guess().map_err(|err| GameError::HostError(err)),
-            _ => unreachable!()
+            _ => unreachable!(),
         }
     }
 }
@@ -223,13 +223,14 @@ fn main() {
 
                     letter_length
                 }
-                Err(_) => continue
+                Err(_) => continue,
             };
 
             break;
         }
 
-        let host = Host::build(bulls_and_cows::Letters::generate_numeric_letters(), letter_length).expect("Failed to initialize a new game");
+        let host = Host::build(bulls_and_cows::Letters::generate_numeric_letters(), letter_length)
+            .expect("Failed to initialize a new game");
 
         let mut qp;
         let mut gp;
@@ -252,20 +253,32 @@ fn main() {
                     match line {
                         1 => {
                             qp = QuestioningPlayer::CLIUser(CLIUserQuestioner::new(letter_length));
-                            gp = GuessingPlayer::Computer(ComputerGuesser::new(&host, COM_THINKING_DELAY));
+                            gp = GuessingPlayer::Computer(ComputerGuesser::new(
+                                &host,
+                                COM_THINKING_DELAY,
+                            ));
                         }
                         2 => {
-                            qp = QuestioningPlayer::Computer(ComputerQuestioner::new(host, COM_THINKING_DELAY));
+                            qp = QuestioningPlayer::Computer(ComputerQuestioner::new(
+                                host,
+                                COM_THINKING_DELAY,
+                            ));
                             gp = GuessingPlayer::CLIUser(CLIUserGuesser::new(letter_length));
                         }
                         3 => {
-                            gp = GuessingPlayer::Computer(ComputerGuesser::new(&host, COM_THINKING_DELAY));
-                            qp = QuestioningPlayer::Computer(ComputerQuestioner::new(host, COM_THINKING_DELAY));
+                            gp = GuessingPlayer::Computer(ComputerGuesser::new(
+                                &host,
+                                COM_THINKING_DELAY,
+                            ));
+                            qp = QuestioningPlayer::Computer(ComputerQuestioner::new(
+                                host,
+                                COM_THINKING_DELAY,
+                            ));
                         }
-                        _ => continue
+                        _ => continue,
                     }
                 }
-                Err(_) => continue
+                Err(_) => continue,
             }
 
             break;
@@ -297,9 +310,7 @@ fn main() {
                                 Ok(ab) => break (guess, ab),
                                 Err(b) => {
                                     match b {
-                                        GameError::HostError(_) => {
-                                            unreachable!()
-                                        }
+                                        GameError::HostError(_) => unreachable!(),
                                         GameError::GuessIncorrect => {
                                             println!("Questioner: Are you kidding?");
                                             continue 'guess;

@@ -1,12 +1,13 @@
 [package]
 name = "bulls-and-cows"
-version = "1.0.8"
+version = "1.0.9"
 authors = ["Magic Len <len@magiclen.org>"]
+edition = "2018"
 repository = "https://github.com/magiclen/bulls-and-cows"
 homepage = "https://magiclen.org/bulls-and-cows"
 keywords = ["bulls-and-cows", "1a2b", "number", "4-digits", "guess"]
 categories = ["game-engines"]
-description= "A framework for building bulls-and-cows games (1A2B) for any data type."
+description = "A framework for building bulls-and-cows games (1A2B) for any data type."
 readme = "README.md"
 license = "MIT"
 

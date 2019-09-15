@@ -1,16 +1,13 @@
+use std::collections::HashSet;
 use std::hash::Hash;
 use std::thread;
 use std::time::{Duration, Instant};
-use std::collections::HashSet;
 
+use crate::permutohedron::Heap;
+use crate::random_pick;
+use crate::{Host, HostError};
 
-use super::Questioner;
-
-use ::{Host, HostError};
-use ::permutohedron::Heap;
-use ::random_pick;
-
-use play::players::player::Guesser;
+use super::{Guesser, Questioner};
 
 /// A questioner controlled by a computer.
 #[derive(Debug)]
@@ -61,7 +58,8 @@ impl<T: Eq + Hash + Clone> ComputerGuesser<T> {
     pub fn new(host: &Host<T>, thinking_delay: u64) -> ComputerGuesser<T> {
         let letters = host.get_letters().clone();
         let letter_length = host.get_answer_length();
-        let possible_elements_table = ComputerGuesser::make_possible_elements_table(&letters, letter_length);
+        let possible_elements_table =
+            ComputerGuesser::make_possible_elements_table(&letters, letter_length);
 
         ComputerGuesser {
             letters,
@@ -136,7 +134,6 @@ impl<T: Eq + Hash + Clone> ComputerGuesser<T> {
             }
         }
 
-
         possible_elements_table
     }
 }
@@ -155,7 +152,8 @@ impl<T: Eq + Hash + Clone> Guesser<T> for ComputerGuesser<T> {
     fn add_condition(&mut self, guess: &[T], reply: (usize, usize)) {
         let now = Instant::now();
 
-        let host = unsafe { Host::build_with_known_answer_unsafe(self.letters.clone(), guess.iter().map(|e| e.clone()).collect()) };
+        let host =
+            unsafe { Host::build_with_known_answer_unsafe(self.letters.clone(), guess.to_vec()) };
 
         for i in (0..(self.possible_elements_table.len())).rev() {
             let re = {
@@ -170,12 +168,13 @@ impl<T: Eq + Hash + Clone> Guesser<T> for ComputerGuesser<T> {
         }
 
         if self.possible_elements_table.is_empty() {
-            self.possible_elements_table = ComputerGuesser::make_possible_elements_table(&self.letters, self.letter_length);
+            self.possible_elements_table =
+                ComputerGuesser::make_possible_elements_table(&self.letters, self.letter_length);
         }
 
         let dt = now.elapsed().as_millis();
 
-        if dt < self.thinking_delay as u128 {
+        if dt < u128::from(self.thinking_delay) {
             thread::sleep(Duration::from_millis(self.thinking_delay - dt as u64));
         }
     }
