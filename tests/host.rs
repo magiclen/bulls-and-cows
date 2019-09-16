@@ -19,8 +19,8 @@ fn known_answer() {
     )
     .unwrap();
 
-    assert_eq!((4, 0), host.answer(&vec![1, 2, 3, 4]).unwrap());
-    assert_eq!((2, 2), host.answer(&vec![1, 2, 4, 3]).unwrap());
-    assert_eq!((0, 4), host.answer(&vec![4, 3, 2, 1]).unwrap());
-    assert_eq!((0, 0), host.answer(&vec![5, 6, 7, 8]).unwrap());
+    assert_eq!((4, 0), host.answer(&[1, 2, 3, 4]).unwrap());
+    assert_eq!((2, 2), host.answer(&[1, 2, 4, 3]).unwrap());
+    assert_eq!((0, 4), host.answer(&[4, 3, 2, 1]).unwrap());
+    assert_eq!((0, 0), host.answer(&[5, 6, 7, 8]).unwrap());
 }
