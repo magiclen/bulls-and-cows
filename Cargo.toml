@@ -1,6 +1,6 @@
 [package]
 name = "bulls-and-cows"
-version = "1.0.11"
+version = "1.0.12"
 authors = ["Magic Len <len@magiclen.org>"]
 edition = "2018"
 repository = "https://github.com/magiclen/bulls-and-cows"
@@ -16,7 +16,7 @@ repository = "magiclen/bulls-and-cows"
 branch = "master"
 
 [dependencies]
-rand = "0.6.5"
+rand = "0.7"
 random-pick = "1.2.3"
 regex = "1.1.2"
 permutohedron = "0.2.4"
