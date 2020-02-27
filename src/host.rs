@@ -1,5 +1,6 @@
 use std::collections::HashSet;
-use std::fmt::{self, Debug, Formatter};
+use std::error::Error;
+use std::fmt::{self, Debug, Display, Formatter};
 use std::hash::Hash;
 
 use crate::rand::seq::SliceRandom;
@@ -18,10 +19,33 @@ pub enum HostError<T: Eq + Hash + Clone> {
 }
 
 impl<T: Eq + Hash + Clone> Debug for HostError<T> {
+    #[inline]
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
         impl_debug_for_enum!(HostError::{LettersEmpty, AnswerLengthIncorrect, (AnswerContainsIncorrectLetter(_): (let .0 = "AnswerContainsIncorrectLetter")), (AnswerContainsDuplicatedLetter(_): (let .0 = "AnswerContainsDuplicatedLetter"))}, f, self);
     }
 }
+
+impl<T: Eq + Hash + Clone> Display for HostError<T> {
+    #[inline]
+    fn fmt(&self, f: &mut Formatter<'_>) -> Result<(), fmt::Error> {
+        match self {
+            HostError::LettersEmpty => {
+                f.write_str("The length of letters for a Bulls and Cows game must be at least 1.")
+            }
+            HostError::AnswerLengthIncorrect => {
+                f.write_str("The length of the answer is incorrect.")
+            }
+            HostError::AnswerContainsIncorrectLetter(_) => {
+                f.write_str("There is an incorrect letter in the answer.")
+            }
+            HostError::AnswerContainsDuplicatedLetter(_) => {
+                f.write_str("There is an duplicated letter in the answer.")
+            }
+        }
+    }
+}
+
+impl<T: Eq + Hash + Clone> Error for HostError<T> {}
 
 /// The game host for generating the question and answering for the question.
 pub struct Host<T: Eq + Hash + Clone> {
