@@ -1,6 +1,6 @@
 [package]
 name = "bulls-and-cows"
-version = "1.0.13"
+version = "1.0.14"
 authors = ["Magic Len <len@magiclen.org>"]
 edition = "2018"
 repository = "https://github.com/magiclen/bulls-and-cows"
