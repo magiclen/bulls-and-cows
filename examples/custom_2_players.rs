@@ -1,5 +1,4 @@
-#[macro_use]
-extern crate lazy_static;
+extern crate once_cell;
 
 extern crate bulls_and_cows;
 
@@ -9,11 +8,11 @@ use bulls_and_cows::parser::ABParser;
 use bulls_and_cows::play::players::{ComputerGuesser, ComputerQuestioner, Guesser, Questioner};
 use bulls_and_cows::{Host, HostError};
 
+use once_cell::sync::Lazy;
+
 const COM_THINKING_DELAY: u64 = 750;
 
-lazy_static! {
-    static ref AB_PARSER: ABParser = { ABParser::new() };
-}
+static AB_PARSER: Lazy<ABParser> = Lazy::new(|| ABParser::new());
 
 pub enum GameError {
     HostError(HostError<u8>),

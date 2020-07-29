@@ -133,6 +133,7 @@ impl<T: Eq + Hash + Clone> Host<T> {
         }
     }
 
+    #[allow(clippy::missing_safety_doc)]
     /// Build a bulls-and-cows game host with a known answer unsafely.
     pub unsafe fn build_with_known_answer_unsafe(letters: HashSet<T>, answer: Vec<T>) -> Host<T> {
         Host {
@@ -204,6 +205,7 @@ impl<T: Eq + Hash + Clone> Host<T> {
         }
     }
 
+    #[allow(clippy::missing_safety_doc)]
     /// Renew this host with a known answer unsafely.
     pub unsafe fn renew_with_known_answer_unsafe(&mut self, answer: Vec<T>) {
         self.answer = answer;

@@ -1,6 +1,6 @@
 [package]
 name = "bulls-and-cows"
-version = "1.0.15"
+version = "1.0.16"
 authors = ["Magic Len <len@magiclen.org>"]
 edition = "2018"
 repository = "https://github.com/magiclen/bulls-and-cows"
@@ -25,4 +25,4 @@ debug-helper = "0.3"
 
 
 [dev-dependencies]
-lazy_static = "1.3.0"
+once_cell = "1"
