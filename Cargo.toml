@@ -10,7 +10,7 @@ categories = ["game-engines"]
 description = "A framework for building bulls-and-cows games (1A2B) for any data type."
 readme = "README.md"
 license = "MIT"
-include = ["src/**/*", "Cargo.toml"]
+include = ["src/**/*", "Cargo.toml", "README.md", "LICENSE"]
 
 [badges.travis-ci]
 repository = "magiclen/bulls-and-cows"
