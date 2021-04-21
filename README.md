@@ -1,7 +1,7 @@
 Bulls and Cows
 ====================
 
-[![Build Status](https://travis-ci.org/magiclen/bulls-and-cows.svg?branch=master)](https://travis-ci.org/magiclen/bulls-and-cows)
+[![CI](https://github.com/magiclen/bulls-and-cows/actions/workflows/ci.yml/badge.svg)](https://github.com/magiclen/bulls-and-cows/actions/workflows/ci.yml)
 
 This crate provides a framework for building bulls-and-cows games (1A2B) for any data type and any stages.
 
