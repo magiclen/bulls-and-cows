@@ -1,6 +1,6 @@
 [package]
 name = "bulls-and-cows"
-version = "1.0.17"
+version = "1.0.19"
 authors = ["Magic Len <len@magiclen.org>"]
 edition = "2018"
 repository = "https://github.com/magiclen/bulls-and-cows"
@@ -13,8 +13,8 @@ license = "MIT"
 include = ["src/**/*", "Cargo.toml", "README.md", "LICENSE"]
 
 [dependencies]
-rand = "0.7"
-random-pick = "1.2.3"
+rand = "0.8"
+random-pick = "1.2.14"
 regex = "1.1.2"
 permutohedron = "0.2.4"
 debug-helper = "0.3"

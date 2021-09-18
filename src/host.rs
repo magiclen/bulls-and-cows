@@ -226,7 +226,7 @@ impl<T: Eq + Hash + Clone> Host<T> {
             let mut cows = 0;
 
             for (i, letter) in answer.iter().enumerate() {
-                if !self.letters.contains(&letter) {
+                if !self.letters.contains(letter) {
                     return Err(HostError::AnswerContainsIncorrectLetter(letter.clone()));
                 }
                 if answer_2.contains(&letter) {
