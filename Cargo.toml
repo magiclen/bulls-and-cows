@@ -1,8 +1,8 @@
 [package]
 name = "bulls-and-cows"
-version = "1.0.19"
+version = "1.0.20"
 authors = ["Magic Len <len@magiclen.org>"]
-edition = "2018"
+edition = "2021"
 repository = "https://github.com/magiclen/bulls-and-cows"
 homepage = "https://magiclen.org/bulls-and-cows"
 keywords = ["bulls-and-cows", "1a2b", "number", "4-digits", "guess"]
@@ -18,7 +18,6 @@ random-pick = "1.2.14"
 regex = "1.1.2"
 permutohedron = "0.2.4"
 debug-helper = "0.3"
-
 
 [dev-dependencies]
 once_cell = "1"

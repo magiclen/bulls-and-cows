@@ -1,7 +1,3 @@
-extern crate once_cell;
-
-extern crate bulls_and_cows;
-
 use std::io::{self, Write};
 
 use bulls_and_cows::parser::ABParser;
@@ -12,7 +8,7 @@ use once_cell::sync::Lazy;
 
 const COM_THINKING_DELAY: u64 = 750;
 
-static AB_PARSER: Lazy<ABParser> = Lazy::new(|| ABParser::new());
+static AB_PARSER: Lazy<ABParser> = Lazy::new(ABParser::new);
 
 pub enum GameError {
     HostError(HostError<u8>),
@@ -148,9 +144,7 @@ impl Questioner<u8> for QuestioningPlayer {
     fn answer(&self, answer: &[u8]) -> Result<(usize, usize), Self::Error> {
         match self {
             QuestioningPlayer::CLIUser(p) => p.answer(answer),
-            QuestioningPlayer::Computer(p) => {
-                p.answer(answer).map_err(|err| GameError::HostError(err))
-            }
+            QuestioningPlayer::Computer(p) => p.answer(answer).map_err(GameError::HostError),
         }
     }
 }
@@ -191,7 +185,7 @@ impl Guesser<u8> for GuessingPlayer {
     fn guess(&self) -> Result<Vec<u8>, Self::Error> {
         match self {
             GuessingPlayer::CLIUser(p) => p.guess(),
-            GuessingPlayer::Computer(p) => p.guess().map_err(|err| GameError::HostError(err)),
+            GuessingPlayer::Computer(p) => p.guess().map_err(GameError::HostError),
             _ => unreachable!(),
         }
     }
@@ -216,7 +210,7 @@ fn main() {
 
             letter_length = match line.parse() {
                 Ok(letter_length) => {
-                    if letter_length < 1 || letter_length > 10 {
+                    if !(1..=10).contains(&letter_length) {
                         continue;
                     }
 
@@ -297,7 +291,7 @@ fn main() {
                         let mut s = String::with_capacity(letter_length);
 
                         for e in guess.iter() {
-                            s.push((e + '0' as u8) as char);
+                            s.push((e + b'0') as char);
                         }
 
                         println!("Guesser: {}", s);

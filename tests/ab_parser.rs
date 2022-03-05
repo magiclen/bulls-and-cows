@@ -1,5 +1,3 @@
-extern crate bulls_and_cows;
-
 use bulls_and_cows::parser::ABParser;
 
 #[test]

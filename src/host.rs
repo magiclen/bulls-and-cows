@@ -3,7 +3,7 @@ use std::error::Error;
 use std::fmt::{self, Debug, Display, Formatter};
 use std::hash::Hash;
 
-use crate::rand::seq::SliceRandom;
+use rand::seq::SliceRandom;
 
 #[derive(PartialEq, Eq)]
 /// The possible errors for the `Host` struct.
@@ -21,7 +21,7 @@ pub enum HostError<T: Eq + Hash + Clone> {
 impl<T: Eq + Hash + Clone> Debug for HostError<T> {
     #[inline]
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
-        impl_debug_for_enum!(HostError::{LettersEmpty, AnswerLengthIncorrect, (AnswerContainsIncorrectLetter(_): (let .0 = "AnswerContainsIncorrectLetter")), (AnswerContainsDuplicatedLetter(_): (let .0 = "AnswerContainsDuplicatedLetter"))}, f, self);
+        debug_helper::impl_debug_for_enum!(HostError::{LettersEmpty, AnswerLengthIncorrect, (AnswerContainsIncorrectLetter(_): (let .0 = "AnswerContainsIncorrectLetter")), (AnswerContainsDuplicatedLetter(_): (let .0 = "AnswerContainsDuplicatedLetter"))}, f, self);
     }
 }
 
@@ -56,7 +56,7 @@ pub struct Host<T: Eq + Hash + Clone> {
 impl<T: Debug + Eq + Hash + Clone> Debug for Host<T> {
     #[inline]
     fn fmt(&self, f: &mut Formatter) -> Result<(), fmt::Error> {
-        impl_debug_for_struct!(Host, f, self, .letters, .answer);
+        debug_helper::impl_debug_for_struct!(Host, f, self, .letters, .answer);
     }
 }
 

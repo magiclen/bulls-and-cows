@@ -14,8 +14,6 @@ Beside 4 digits, players can choose to play on any other length of digits. The 4
 The `host` struct can be used independently for generating the question and answering for the question.
 
 ```rust
-extern crate bulls_and_cows;
-
 let host = bulls_and_cows::Host::build_with_known_answer(bulls_and_cows::Letters::generate_numeric_letters(), vec![1, 2, 3, 4]).unwrap();
 
 assert_eq!((4, 0), host.answer(&[1, 2, 3, 4]).unwrap());

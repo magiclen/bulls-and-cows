@@ -1,5 +1,3 @@
-extern crate bulls_and_cows;
-
 #[test]
 fn random_answer() {
     let host = bulls_and_cows::Host::build_with_random_answer(

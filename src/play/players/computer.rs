@@ -3,8 +3,9 @@ use std::hash::Hash;
 use std::thread;
 use std::time::{Duration, Instant};
 
-use crate::permutohedron::Heap;
-use crate::random_pick;
+use permutohedron::Heap;
+use random_pick;
+
 use crate::{Host, HostError};
 
 use super::{Guesser, Questioner};

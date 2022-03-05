@@ -1,5 +1,3 @@
-extern crate bulls_and_cows;
-
 use std::io::{self, Write};
 
 use bulls_and_cows::Host;

@@ -12,8 +12,6 @@ Beside 4 digits, players can choose to play on any other length of digits. The 4
 The `host` struct can be used independently for generating the question and answering for the question.
 
 ```rust
-extern crate bulls_and_cows;
-
 let host = bulls_and_cows::Host::build_with_known_answer(bulls_and_cows::Letters::generate_numeric_letters(), vec![1, 2, 3, 4]).unwrap();
 
 assert_eq!((4, 0), host.answer(&[1, 2, 3, 4]).unwrap());
@@ -24,13 +22,6 @@ assert_eq!((0, 0), host.answer(&[5, 6, 7, 8]).unwrap());
 
 If you want to build up a more complete game stage, use the `play` module. You can see the example `custom_2_players` to learn how to do that.
 */
-
-extern crate permutohedron;
-extern crate rand;
-extern crate random_pick;
-extern crate regex;
-#[macro_use]
-extern crate debug_helper;
 
 mod host;
 mod letters;
