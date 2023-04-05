@@ -3,6 +3,7 @@ name = "bulls-and-cows"
 version = "1.0.20"
 authors = ["Magic Len <len@magiclen.org>"]
 edition = "2021"
+rust-version = "1.56"
 repository = "https://github.com/magiclen/bulls-and-cows"
 homepage = "https://magiclen.org/bulls-and-cows"
 keywords = ["bulls-and-cows", "1a2b", "number", "4-digits", "guess"]
