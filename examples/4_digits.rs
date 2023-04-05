@@ -37,21 +37,19 @@ fn main() {
 
             for i in 0..LETTER_LENGTH {
                 match guess.get(i..(i + 1)) {
-                    Some(o) => {
-                        match o.parse() {
-                            Ok(n) => answer.push(n),
-                            Err(_) => {
-                                println!("Wrong format!");
+                    Some(o) => match o.parse() {
+                        Ok(n) => answer.push(n),
+                        Err(_) => {
+                            println!("Wrong format!");
 
-                                continue;
-                            }
-                        }
-                    }
+                            continue;
+                        },
+                    },
                     None => {
                         println!("Wrong format!");
 
                         continue;
-                    }
+                    },
                 }
             }
 
@@ -64,12 +62,12 @@ fn main() {
                         println!();
                         break;
                     }
-                }
+                },
                 Err(_) => {
                     println!("Wrong format!");
 
                     continue;
-                }
+                },
             }
         }
 

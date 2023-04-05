@@ -1,9 +1,10 @@
 use std::io::{self, Write};
 
-use bulls_and_cows::parser::ABParser;
-use bulls_and_cows::play::players::{ComputerGuesser, ComputerQuestioner, Guesser, Questioner};
-use bulls_and_cows::{Host, HostError};
-
+use bulls_and_cows::{
+    parser::ABParser,
+    play::players::{ComputerGuesser, ComputerQuestioner, Guesser, Questioner},
+    Host, HostError,
+};
 use once_cell::sync::Lazy;
 
 const COM_THINKING_DELAY: u64 = 750;
@@ -54,14 +55,14 @@ impl Questioner<u8> for CLIUserQuestioner {
                 } else {
                     Ok((a, b))
                 }
-            }
+            },
             None => Err(GameError::ABError(reply)),
         }
     }
 }
 
 pub struct CLIUserGuesser {
-    guess_times: usize,
+    guess_times:   usize,
     letter_length: usize,
 }
 
@@ -108,17 +109,15 @@ impl Guesser<u8> for CLIUserGuesser {
 
         for i in 0..self.letter_length {
             match guess.get(i..(i + 1)) {
-                Some(o) => {
-                    match o.parse() {
-                        Ok(n) => answer.push(n),
-                        Err(_) => {
-                            return Err(GameError::GuessIncorrect);
-                        }
-                    }
-                }
+                Some(o) => match o.parse() {
+                    Ok(n) => answer.push(n),
+                    Err(_) => {
+                        return Err(GameError::GuessIncorrect);
+                    },
+                },
                 None => {
                     return Err(GameError::GuessIncorrect);
-                }
+                },
             }
         }
 
@@ -215,7 +214,7 @@ fn main() {
                     }
 
                     letter_length
-                }
+                },
                 Err(_) => continue,
             };
 
@@ -229,7 +228,10 @@ fn main() {
         let mut gp;
 
         loop {
-            println!("What are you want to be?\n    1. the questioner\n    2. the guesser\n    3. a spectator");
+            println!(
+                "What are you want to be?\n    1. the questioner\n    2. the guesser\n    3. a \
+                 spectator"
+            );
 
             print!("[1-3] ");
 
@@ -242,35 +244,33 @@ fn main() {
             let line = line.trim();
 
             match line.parse() {
-                Ok(line) => {
-                    match line {
-                        1 => {
-                            qp = QuestioningPlayer::CLIUser(CLIUserQuestioner::new(letter_length));
-                            gp = GuessingPlayer::Computer(ComputerGuesser::new(
-                                &host,
-                                COM_THINKING_DELAY,
-                            ));
-                        }
-                        2 => {
-                            qp = QuestioningPlayer::Computer(ComputerQuestioner::new(
-                                host,
-                                COM_THINKING_DELAY,
-                            ));
-                            gp = GuessingPlayer::CLIUser(CLIUserGuesser::new(letter_length));
-                        }
-                        3 => {
-                            gp = GuessingPlayer::Computer(ComputerGuesser::new(
-                                &host,
-                                COM_THINKING_DELAY,
-                            ));
-                            qp = QuestioningPlayer::Computer(ComputerQuestioner::new(
-                                host,
-                                COM_THINKING_DELAY,
-                            ));
-                        }
-                        _ => continue,
-                    }
-                }
+                Ok(line) => match line {
+                    1 => {
+                        qp = QuestioningPlayer::CLIUser(CLIUserQuestioner::new(letter_length));
+                        gp = GuessingPlayer::Computer(ComputerGuesser::new(
+                            &host,
+                            COM_THINKING_DELAY,
+                        ));
+                    },
+                    2 => {
+                        qp = QuestioningPlayer::Computer(ComputerQuestioner::new(
+                            host,
+                            COM_THINKING_DELAY,
+                        ));
+                        gp = GuessingPlayer::CLIUser(CLIUserGuesser::new(letter_length));
+                    },
+                    3 => {
+                        gp = GuessingPlayer::Computer(ComputerGuesser::new(
+                            &host,
+                            COM_THINKING_DELAY,
+                        ));
+                        qp = QuestioningPlayer::Computer(ComputerQuestioner::new(
+                            host,
+                            COM_THINKING_DELAY,
+                        ));
+                    },
+                    _ => continue,
+                },
                 Err(_) => continue,
             }
 
@@ -307,25 +307,25 @@ fn main() {
                                         GameError::GuessIncorrect => {
                                             println!("Questioner: Are you kidding?");
                                             continue 'guess;
-                                        }
+                                        },
                                         GameError::ABIncorrect((a, b)) => {
                                             println!("Questioner: {}A{}B... just kidding.", a, b);
-                                        }
+                                        },
                                         GameError::ABError(s) => {
                                             println!("Questioner: {}... just kidding.", s.trim());
-                                        }
+                                        },
                                     }
 
                                     continue;
-                                }
+                                },
                             }
                         };
-                    }
+                    },
                     Err(_) => {
                         println!("Wrong format!");
 
                         continue;
-                    }
+                    },
                 }
             };
 

@@ -28,5 +28,7 @@ mod letters;
 pub mod parser;
 pub mod play;
 
-pub use self::host::{Host, HostError};
-pub use self::letters::Letters;
+pub use self::{
+    host::{Host, HostError},
+    letters::Letters,
+};

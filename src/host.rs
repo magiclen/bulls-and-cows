@@ -1,7 +1,9 @@
-use std::collections::HashSet;
-use std::error::Error;
-use std::fmt::{self, Debug, Display, Formatter};
-use std::hash::Hash;
+use std::{
+    collections::HashSet,
+    error::Error,
+    fmt::{self, Debug, Display, Formatter},
+    hash::Hash,
+};
 
 use rand::seq::SliceRandom;
 
@@ -31,16 +33,16 @@ impl<T: Eq + Hash + Clone> Display for HostError<T> {
         match self {
             HostError::LettersEmpty => {
                 f.write_str("The length of letters for a Bulls and Cows game must be at least 1.")
-            }
+            },
             HostError::AnswerLengthIncorrect => {
                 f.write_str("The length of the answer is incorrect.")
-            }
+            },
             HostError::AnswerContainsIncorrectLetter(_) => {
                 f.write_str("There is an incorrect letter in the answer.")
-            }
+            },
             HostError::AnswerContainsDuplicatedLetter(_) => {
                 f.write_str("There is an duplicated letter in the answer.")
-            }
+            },
         }
     }
 }
@@ -50,7 +52,7 @@ impl<T: Eq + Hash + Clone> Error for HostError<T> {}
 /// The game host for generating the question and answering for the question.
 pub struct Host<T: Eq + Hash + Clone> {
     letters: HashSet<T>,
-    answer: Vec<T>,
+    answer:  Vec<T>,
 }
 
 impl<T: Debug + Eq + Hash + Clone> Debug for Host<T> {

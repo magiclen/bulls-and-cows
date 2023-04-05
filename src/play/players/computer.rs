@@ -1,19 +1,20 @@
-use std::collections::HashSet;
-use std::hash::Hash;
-use std::thread;
-use std::time::{Duration, Instant};
+use std::{
+    collections::HashSet,
+    hash::Hash,
+    thread,
+    time::{Duration, Instant},
+};
 
 use permutohedron::Heap;
 use random_pick;
 
-use crate::{Host, HostError};
-
 use super::{Guesser, Questioner};
+use crate::{Host, HostError};
 
 /// A questioner controlled by a computer.
 #[derive(Debug)]
 pub struct ComputerQuestioner<T: Eq + Hash + Clone> {
-    host: Host<T>,
+    host:           Host<T>,
     thinking_delay: u64,
 }
 
@@ -47,11 +48,11 @@ impl<T: Eq + Hash + Clone> Questioner<T> for ComputerQuestioner<T> {
 /// A guesser controlled by a computer.
 #[derive(Debug)]
 pub struct ComputerGuesser<T: Eq + Hash + Clone> {
-    letters: HashSet<T>,
-    letter_length: usize,
+    letters:                 HashSet<T>,
+    letter_length:           usize,
     possible_elements_table: Vec<Vec<T>>,
-    guess_times: usize,
-    thinking_delay: u64,
+    guess_times:             usize,
+    thinking_delay:          u64,
 }
 
 impl<T: Eq + Hash + Clone> ComputerGuesser<T> {
