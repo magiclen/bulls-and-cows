@@ -180,12 +180,7 @@ impl<T: Eq + Hash + Clone> Host<T> {
 
     /// Renew this host with a known answer.
     pub fn renew_with_known_answer(&mut self, answer: Vec<T>) -> Result<(), HostError<T>> {
-        let letters = &self.letters;
-
-        let letters_len = letters.len();
-        let answer_length = answer.len();
-
-        if answer_length == 0 || answer_length > letters_len {
+        if answer.len() != self.get_answer_length() {
             Err(HostError::AnswerLengthIncorrect)
         } else {
             let mut answer_2: Vec<T> = Vec::with_capacity(answer_length);
