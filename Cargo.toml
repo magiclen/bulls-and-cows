@@ -1,9 +1,9 @@
 [package]
 name = "bulls-and-cows"
-version = "1.0.21"
+version = "1.0.22"
 authors = ["Magic Len <len@magiclen.org>"]
 edition = "2021"
-rust-version = "1.61"
+rust-version = "1.65"
 repository = "https://github.com/magiclen/bulls-and-cows"
 homepage = "https://magiclen.org/bulls-and-cows"
 keywords = ["bulls-and-cows", "game-1a2b", "number", "game-four-digits", "guess"]
