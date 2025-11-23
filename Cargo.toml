@@ -1,9 +1,9 @@
 [package]
 name = "bulls-and-cows"
-version = "1.0.22"
+version = "1.0.23"
 authors = ["Magic Len <len@magiclen.org>"]
 edition = "2021"
-rust-version = "1.65"
+rust-version = "1.80"
 repository = "https://github.com/magiclen/bulls-and-cows"
 homepage = "https://magiclen.org/bulls-and-cows"
 keywords = ["bulls-and-cows", "game-1a2b", "number", "game-four-digits", "guess"]
@@ -13,11 +13,8 @@ license = "MIT"
 include = ["src/**/*", "Cargo.toml", "README.md", "LICENSE"]
 
 [dependencies]
-rand = "0.8"
-random-pick = "1.2.14"
-regex = "1.1.2"
-permutohedron = "0.2.4"
+rand = "0.9"
+random-pick = "1.2.17"
+regex = "1"
+permutohedron = "0.2"
 debug-helper = "0.3"
-
-[dev-dependencies]
-once_cell = "1"
