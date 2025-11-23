@@ -164,7 +164,7 @@ impl<T: Eq + Hash + Clone> Host<T> {
                     indices.push(i);
                 }
 
-                let mut rng = &mut rand::thread_rng();
+                let mut rng = &mut rand::rng();
                 indices.shuffle(&mut rng);
 
                 for i in indices {

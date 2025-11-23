@@ -1,15 +1,17 @@
-use std::io::{self, Write};
+use std::{
+    io::{self, Write},
+    sync::LazyLock,
+};
 
 use bulls_and_cows::{
     parser::ABParser,
     play::players::{ComputerGuesser, ComputerQuestioner, Guesser, Questioner},
     Host, HostError,
 };
-use once_cell::sync::Lazy;
 
 const COM_THINKING_DELAY: u64 = 750;
 
-static AB_PARSER: Lazy<ABParser> = Lazy::new(ABParser::new);
+static AB_PARSER: LazyLock<ABParser> = LazyLock::new(ABParser::new);
 
 pub enum GameError {
     HostError(HostError<u8>),
