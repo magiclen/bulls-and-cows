@@ -13,6 +13,24 @@ const COM_THINKING_DELAY: u64 = 750;
 
 static AB_PARSER: LazyLock<ABParser> = LazyLock::new(ABParser::new);
 
+fn parse_guess(guess: &str, letter_length: usize) -> Result<Vec<u8>, GameError> {
+    if guess.len() != letter_length {
+        return Err(GameError::GuessIncorrect);
+    }
+
+    let mut answer = Vec::with_capacity(letter_length);
+
+    for digit in guess.bytes() {
+        if !digit.is_ascii_digit() {
+            return Err(GameError::GuessIncorrect);
+        }
+
+        answer.push(digit - b'0');
+    }
+
+    Ok(answer)
+}
+
 pub enum GameError {
     HostError(HostError<u8>),
     ABIncorrect((usize, usize)),
@@ -93,8 +111,6 @@ impl Guesser<u8> for CLIUserGuesser {
     }
 
     fn guess(&self) -> Result<Vec<u8>, Self::Error> {
-        let mut answer = Vec::with_capacity(self.letter_length);
-
         print!("> ");
 
         let mut guess = String::new();
@@ -105,25 +121,7 @@ impl Guesser<u8> for CLIUserGuesser {
 
         let guess = guess.trim();
 
-        if guess.len() != self.letter_length {
-            return Err(GameError::GuessIncorrect);
-        }
-
-        for i in 0..self.letter_length {
-            match guess.get(i..(i + 1)) {
-                Some(o) => match o.parse() {
-                    Ok(n) => answer.push(n),
-                    Err(_) => {
-                        return Err(GameError::GuessIncorrect);
-                    },
-                },
-                None => {
-                    return Err(GameError::GuessIncorrect);
-                },
-            }
-        }
-
-        Ok(answer)
+        parse_guess(guess, self.letter_length)
     }
 }
 

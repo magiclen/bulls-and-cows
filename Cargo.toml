@@ -1,6 +1,6 @@
 [package]
 name = "bulls-and-cows"
-version = "1.0.23"
+version = "1.0.24"
 authors = ["Magic Len <len@magiclen.org>"]
 edition = "2021"
 rust-version = "1.80"
@@ -13,8 +13,7 @@ license = "MIT"
 include = ["src/**/*", "Cargo.toml", "README.md", "LICENSE"]
 
 [dependencies]
-rand = "0.9"
-random-pick = "1.2.17"
+rand = "0.10"
 regex = "1"
 permutohedron = "0.2"
 debug-helper = "0.3"

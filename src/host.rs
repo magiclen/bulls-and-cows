@@ -5,7 +5,7 @@ use std::{
     hash::Hash,
 };
 
-use rand::seq::SliceRandom;
+use rand::seq::IteratorRandom;
 
 #[derive(PartialEq, Eq)]
 /// The possible errors for the `Host` struct.
@@ -63,21 +63,31 @@ impl<T: Debug + Eq + Hash + Clone> Debug for Host<T> {
 }
 
 impl<T: Eq + Hash + Clone> Host<T> {
+    /// Get all letters that can be used in an answer or a guess.
     pub fn get_letters(&self) -> &HashSet<T> {
         &self.letters
     }
 
+    /// Get the length of the answer.
     pub fn get_answer_length(&self) -> usize {
         self.answer.len()
     }
 
+    /// Get the current answer.
     pub fn get_answer(&self) -> &[T] {
         &self.answer
     }
 }
 
 impl<T: Eq + Hash + Clone> Host<T> {
-    /// Build a bulls-and-cows game host with a fixed answer.
+    /// Build a bulls-and-cows game host with an arbitrary initial answer.
+    ///
+    /// The answer is selected from the iteration order of the provided
+    /// [`HashSet`]. That order is not stable and should not be treated as a
+    /// random answer or a reproducible known answer.
+    ///
+    /// Use [`Host::build_with_random_answer`] if you need a random answer, and
+    /// use [`Host::build_with_known_answer`] if you need to specify the answer.
     pub fn build(letters: HashSet<T>, answer_length: usize) -> Result<Host<T>, HostError<T>> {
         if letters.is_empty() {
             Err(HostError::LettersEmpty)
@@ -98,6 +108,9 @@ impl<T: Eq + Hash + Clone> Host<T> {
     }
 
     /// Build a bulls-and-cows game host with a random answer.
+    ///
+    /// The answer is made of `answer_length` distinct letters randomly chosen
+    /// from `letters`.
     pub fn build_with_random_answer(
         letters: HashSet<T>,
         answer_length: usize,
@@ -117,6 +130,9 @@ impl<T: Eq + Hash + Clone> Host<T> {
     }
 
     /// Build a bulls-and-cows game host with a known answer.
+    ///
+    /// The answer must be non-empty, no longer than `letters`, contain only
+    /// letters from `letters`, and contain no duplicated letters.
     pub fn build_with_known_answer(
         letters: HashSet<T>,
         answer: Vec<T>,
@@ -135,8 +151,15 @@ impl<T: Eq + Hash + Clone> Host<T> {
         }
     }
 
-    #[allow(clippy::missing_safety_doc)]
     /// Build a bulls-and-cows game host with a known answer unsafely.
+    ///
+    /// # Safety
+    ///
+    /// The caller must ensure that `letters` is not empty, `answer.len()` is in
+    /// `1..=letters.len()`, every element in `answer` exists in `letters`, and
+    /// `answer` contains no duplicated elements. Breaking these rules will not
+    /// cause memory unsafety, but it can make game results incorrect or make
+    /// callers that assume a valid host state panic.
     pub unsafe fn build_with_known_answer_unsafe(letters: HashSet<T>, answer: Vec<T>) -> Host<T> {
         Host {
             letters,
@@ -145,6 +168,9 @@ impl<T: Eq + Hash + Clone> Host<T> {
     }
 
     /// Renew this host with a random answer.
+    ///
+    /// The answer is made of `answer_length` distinct letters randomly chosen
+    /// from this host's letters.
     pub fn renew_with_random_answer(&mut self, answer_length: usize) -> Result<(), HostError<T>> {
         let letters = &self.letters;
 
@@ -153,24 +179,12 @@ impl<T: Eq + Hash + Clone> Host<T> {
         if answer_length == 0 || answer_length > letters_len {
             Err(HostError::AnswerLengthIncorrect)
         } else {
-            let mut answer: Vec<T> = Vec::with_capacity(answer_length);
-
-            {
-                let letters_vec: Vec<&T> = letters.iter().collect();
-
-                let mut indices: Vec<usize> = Vec::with_capacity(answer_length);
-
-                for i in 0..answer_length {
-                    indices.push(i);
-                }
-
-                let mut rng = &mut rand::rng();
-                indices.shuffle(&mut rng);
-
-                for i in indices {
-                    answer.push(letters_vec[i].clone());
-                }
-            }
+            let answer: Vec<T> = letters
+                .iter()
+                .sample(&mut rand::rng(), answer_length)
+                .into_iter()
+                .cloned()
+                .collect();
 
             self.answer = answer;
 
@@ -188,41 +202,50 @@ impl<T: Eq + Hash + Clone> Host<T> {
         if answer_length == 0 || answer_length > letters_len {
             Err(HostError::AnswerLengthIncorrect)
         } else {
-            let mut answer_2: Vec<T> = Vec::with_capacity(answer_length);
+            let mut answer_set: HashSet<&T> = HashSet::with_capacity(answer_length);
 
-            for letter in answer {
-                if !letters.contains(&letter) {
-                    return Err(HostError::AnswerContainsIncorrectLetter(letter));
+            for letter in &answer {
+                if !letters.contains(letter) {
+                    return Err(HostError::AnswerContainsIncorrectLetter(letter.clone()));
                 }
-                if answer_2.contains(&letter) {
-                    return Err(HostError::AnswerContainsDuplicatedLetter(letter));
+                if !answer_set.insert(letter) {
+                    return Err(HostError::AnswerContainsDuplicatedLetter(letter.clone()));
                 }
-
-                answer_2.push(letter);
             }
 
-            self.answer = answer_2;
+            self.answer = answer;
 
             Ok(())
         }
     }
 
-    #[allow(clippy::missing_safety_doc)]
     /// Renew this host with a known answer unsafely.
+    ///
+    /// # Safety
+    ///
+    /// The caller must ensure that `answer.len()` is in
+    /// `1..=self.get_letters().len()`, every element in `answer` exists in this
+    /// host's letters, and `answer` contains no duplicated elements. Breaking
+    /// these rules will not cause memory unsafety, but it can make game results
+    /// incorrect or make callers that assume a valid host state panic.
     pub unsafe fn renew_with_known_answer_unsafe(&mut self, answer: Vec<T>) {
         self.answer = answer;
     }
 }
 
 impl<T: Eq + Hash + Clone> Host<T> {
-    /// Answer for the question. If the format of the input answer is correct, it returns the number of bulls and the number of cows.
+    /// Answer for the question.
+    ///
+    /// If the input has the correct length, contains only known letters, and has
+    /// no duplicated letters, this returns the number of bulls and cows.
     pub fn answer(&self, answer: &[T]) -> Result<(usize, usize), HostError<T>> {
         let answer_length = answer.len();
 
         if answer_length != self.get_answer_length() {
             Err(HostError::AnswerLengthIncorrect)
         } else {
-            let mut answer_2: Vec<&T> = Vec::with_capacity(answer_length);
+            let answer_set: HashSet<&T> = self.answer.iter().collect();
+            let mut guessed_set: HashSet<&T> = HashSet::with_capacity(answer_length);
 
             let mut bulls = 0;
             let mut cows = 0;
@@ -231,17 +254,15 @@ impl<T: Eq + Hash + Clone> Host<T> {
                 if !self.letters.contains(letter) {
                     return Err(HostError::AnswerContainsIncorrectLetter(letter.clone()));
                 }
-                if answer_2.contains(&letter) {
+                if !guessed_set.insert(letter) {
                     return Err(HostError::AnswerContainsDuplicatedLetter(letter.clone()));
                 }
 
                 if self.answer[i].eq(letter) {
                     bulls += 1;
-                } else if self.answer.contains(letter) {
+                } else if answer_set.contains(letter) {
                     cows += 1;
                 }
-
-                answer_2.push(letter);
             }
 
             Ok((bulls, cows))

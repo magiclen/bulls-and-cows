@@ -4,6 +4,24 @@ use bulls_and_cows::Host;
 
 const LETTER_LENGTH: usize = 4; // the reasonable range is 1~10
 
+fn parse_guess(guess: &str) -> Option<Vec<u8>> {
+    if guess.len() != LETTER_LENGTH {
+        return None;
+    }
+
+    let mut answer = Vec::with_capacity(LETTER_LENGTH);
+
+    for digit in guess.bytes() {
+        if !digit.is_ascii_digit() {
+            return None;
+        }
+
+        answer.push(digit - b'0');
+    }
+
+    Some(answer)
+}
+
 fn main() {
     let mut host = Host::build_with_random_answer(
         bulls_and_cows::Letters::generate_numeric_letters(),
@@ -27,31 +45,11 @@ fn main() {
 
             let guess = guess.trim();
 
-            if guess.len() != LETTER_LENGTH {
+            let Some(answer) = parse_guess(guess) else {
                 println!("Wrong format!");
 
                 continue;
-            }
-
-            let mut answer = Vec::with_capacity(LETTER_LENGTH);
-
-            for i in 0..LETTER_LENGTH {
-                match guess.get(i..(i + 1)) {
-                    Some(o) => match o.parse() {
-                        Ok(n) => answer.push(n),
-                        Err(_) => {
-                            println!("Wrong format!");
-
-                            continue;
-                        },
-                    },
-                    None => {
-                        println!("Wrong format!");
-
-                        continue;
-                    },
-                }
-            }
+            };
 
             match host.answer(&answer) {
                 Ok((a, b)) => {

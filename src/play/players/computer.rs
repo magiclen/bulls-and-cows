@@ -6,7 +6,7 @@ use std::{
 };
 
 use permutohedron::Heap;
-use random_pick;
+use rand::seq::IndexedRandom;
 
 use super::{Guesser, Questioner};
 use crate::{Host, HostError};
@@ -46,6 +46,14 @@ impl<T: Eq + Hash + Clone> Questioner<T> for ComputerQuestioner<T> {
 }
 
 /// A guesser controlled by a computer.
+///
+/// This guesser eagerly builds a table containing every possible answer. This
+/// is practical for small games such as four digits chosen from `0..=9`, but it
+/// can consume a large amount of memory for bigger letter sets or answer
+/// lengths.
+///
+/// Conditions added with [`Guesser::add_condition`] are expected to use guesses
+/// produced by this same guesser.
 #[derive(Debug)]
 pub struct ComputerGuesser<T: Eq + Hash + Clone> {
     letters:                 HashSet<T>,
@@ -56,7 +64,11 @@ pub struct ComputerGuesser<T: Eq + Hash + Clone> {
 }
 
 impl<T: Eq + Hash + Clone> ComputerGuesser<T> {
-    /// Create a new computer player as a guesser. The `thinking_delay` is a value which simulates the time in milliseconds that a human player needs to take to think.
+    /// Create a new computer player as a guesser.
+    ///
+    /// The `thinking_delay` simulates the time in milliseconds that a human
+    /// player needs to think. This constructor builds all possible answers for
+    /// the host's letters and answer length.
     pub fn new(host: &Host<T>, thinking_delay: u64) -> ComputerGuesser<T> {
         let letters = host.get_letters().clone();
         let letter_length = host.get_answer_length();
@@ -77,8 +89,8 @@ impl<T: Eq + Hash + Clone> ComputerGuesser<T> {
 
         let mut capacity = 1;
 
-        for _ in 0..letter_length {
-            capacity *= letters_length - letter_length;
+        for i in 0..letter_length {
+            capacity *= letters_length - i;
         }
 
         let mut possible_elements_table = Vec::with_capacity(capacity);
@@ -184,7 +196,7 @@ impl<T: Eq + Hash + Clone> Guesser<T> for ComputerGuesser<T> {
     fn guess(&self) -> Result<Vec<T>, Self::Error> {
         thread::sleep(Duration::from_millis(self.thinking_delay));
 
-        let picked = random_pick::pick_from_slice(&self.possible_elements_table, &[1]).unwrap();
+        let picked = self.possible_elements_table.choose(&mut rand::rng()).unwrap();
 
         Ok(picked.clone())
     }
