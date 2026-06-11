@@ -22,7 +22,7 @@ assert_eq!((0, 4), host.answer(&[4, 3, 2, 1]).unwrap());
 assert_eq!((0, 0), host.answer(&[5, 6, 7, 8]).unwrap());
 ```
 
-If you want to build up a more complete game stage, use the `play` module. You can see the example `custom_2_players` to learn how to do that.
+If you want to build up a more complete game stage, use the `play` module.
 
 ## Crates.io
 
